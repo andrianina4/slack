@@ -18,7 +18,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
+import { getInitialName } from "@/lib";
 // import { useRouter } from "next/router";
 export default function SidebarCustom() {
   const user = useAuth();
@@ -70,8 +71,11 @@ export default function SidebarCustom() {
             <DropdownMenuTrigger>
               <div className="flex items-center cursor-pointer gap-2.5">
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+                  <AvatarFallback>
+                    {getInitialName(user?.firstname)}
+                    {getInitialName(user?.lastname)}
+                  </AvatarFallback>
                 </Avatar>
 
                 <div className="text-xs text-left grow font-semibold">
