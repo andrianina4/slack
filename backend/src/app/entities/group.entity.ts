@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
   BaseEntity,
   Column,
@@ -8,18 +9,16 @@ import {
 import { GroupMembers } from "./group-members.entity";
 
 @Entity()
-export class User extends BaseEntity {
+export class Group extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  email: string;
+  name: string;
 
-  @Column()
-  password: string;
+  @Column({ default: true })
+  isPublic: boolean;
 
-  @OneToMany(() => GroupMembers, (group) => group.user)
+  @OneToMany(() => GroupMembers, (group) => group.group)
   groupeMembers: GroupMembers[];
 }
-
-export { DatabaseSession, Permission, Group } from "@foal/typeorm";
