@@ -35,6 +35,7 @@ export class AuthController {
   @UseSessions()
   @UserRequired()
   async logout(ctx: Context) {
+    console.log("MIDITRA ATO ZANY");
     await ctx.session!.destroy();
     return new HttpResponseNoContent();
   }
