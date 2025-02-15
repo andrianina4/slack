@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Group } from "./group.entity";
+import { Channel } from "./group.entity";
 import { User } from "./user.entity";
 
 @Entity()
@@ -14,8 +14,8 @@ export class GroupMembers extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Group, (group) => group.groupeMembers)
-  group: Group;
+  @ManyToOne(() => Channel, (group) => group.groupeMembers)
+  channel: Channel;
 
   @Column({ default: false })
   isOwner: boolean;

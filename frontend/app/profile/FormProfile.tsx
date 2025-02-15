@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { IUser } from "@/interfaces/entity";
 import { useEffect } from "react";
+import { modifyUser } from "@/api/user";
 const FormSchema = z.object({
   email: z
     .string({
@@ -58,8 +59,10 @@ export function FormProfile({ user }: PropsFormProfile) {
     }
   }, [user, form]);
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("Submited", data);
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (user) {
+      await modifyUser({ ...data, id: user.id });
+    }
   }
 
   console.log({ error: form.formState.errors });

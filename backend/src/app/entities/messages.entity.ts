@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./user.entity";
-import { Group } from "./group.entity";
+import { Channel } from "./group.entity";
 
 @Entity()
 export class Messages extends BaseEntity {
@@ -26,9 +26,9 @@ export class Messages extends BaseEntity {
   @JoinColumn()
   recipentUser: User;
 
-  @ManyToOne(() => Group)
+  @ManyToOne(() => Channel)
   @JoinColumn()
-  recipentGroup: Group;
+  recipentGroup: Channel;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   timestamp: Date;

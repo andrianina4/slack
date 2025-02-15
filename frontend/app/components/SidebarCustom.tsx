@@ -5,6 +5,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   //   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
@@ -30,7 +31,62 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
 import { getInitialName } from "@/lib";
-// import { useRouter } from "next/router";
+import { Earth, Lock } from "lucide-react";
+import DropdownCustom from "./DropdownCustom";
+
+type PropsGroupedMenu = {
+  label: string;
+};
+
+const GroupedMenu = ({ label }: PropsGroupedMenu) => {
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel className="text-zinc-400">
+        <DropdownCustom title={label} />
+      </SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          <Collapsible defaultOpen className="group/collapsible">
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton asChild>
+                  <a href={"#"}>
+                    <Earth />
+                    <span>Publique</span>
+                  </a>
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
+
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>#test-rh</SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton asChild>
+                  <a href={"#"}>
+                    <Lock />
+                    <span>Privée</span>
+                  </a>
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
+
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>#test-rh</SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </SidebarMenuItem>
+          </Collapsible>
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+};
+
 export default function SidebarCustom() {
   const user = useAuth();
   const router = useRouter();
@@ -39,31 +95,7 @@ export default function SidebarCustom() {
     <SidebarProvider>
       <Sidebar style={{ width: "300px" }}>
         <SidebarContent>
-          <SidebarGroup>
-            {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <Collapsible defaultOpen className="group/collapsible">
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton asChild>
-                        <a href={"#"}>
-                          {/* <item.icon /> */}
-                          <span>#Canaux</span>
-                        </a>
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        <SidebarMenuSubItem>Test</SidebarMenuSubItem>
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          <GroupedMenu label="Listes des canaux" />
         </SidebarContent>
 
         <SidebarFooter className="cursor-pointer">

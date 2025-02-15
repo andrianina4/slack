@@ -9,7 +9,7 @@ import {
 import { GroupMembers } from "./group-members.entity";
 
 @Entity()
-export class Group extends BaseEntity {
+export class Channel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,6 +19,6 @@ export class Group extends BaseEntity {
   @Column({ default: true })
   isPublic: boolean;
 
-  @OneToMany(() => GroupMembers, (group) => group.group)
+  @OneToMany(() => GroupMembers, (Channel) => Channel.channel)
   groupeMembers: GroupMembers[];
 }
