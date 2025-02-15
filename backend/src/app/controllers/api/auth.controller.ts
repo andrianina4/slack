@@ -49,32 +49,24 @@ export class AuthController {
     const { userInfo } = await this.google.getUserInfo<GoogleUserInfo>(ctx);
 
     if (!userInfo.email) {
-      // throw new Error('Google should have returned an email address.');
       return new HttpResponseRedirect("/login?google=700");
     }
 
-    const user = await User.findOne({
+    let user = await User.findOne({
       where: {
         email: userInfo.email,
       },
     });
 
-    const hashed = await hashPassword(Math.random().toString());
-
     if (!user) {
-      return new HttpResponseRedirect(
-        `/login?google=${hashed}&email=${userInfo.email}&user=${JSON.stringify(
-          user
-        )}`
-      );
-    } else {
-      //   const userEncryptData = encryptData(user);
-
-      ctx.session!.setUser(user);
-      ctx.user = user;
-
-      //   return new HttpResponseRedirect(`/?userInfo=${userEncryptData}`);
-      return new HttpResponseRedirect(`/`);
+      user = new User();
+      user.email = userInfo.email;
+      user.password = "password_auth";
+      await user.save();
     }
+
+    ctx.session!.setUser(user);
+
+    return new HttpResponseRedirect(`/`);
   }
 }

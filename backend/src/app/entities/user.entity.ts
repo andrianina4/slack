@@ -6,9 +6,10 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { GroupMembers } from "./group-members.entity";
+import { UserWithPermissions } from "@foal/typeorm";
 
 @Entity()
-export class User extends BaseEntity {
+export class User extends UserWithPermissions {
   @PrimaryGeneratedColumn()
   id: number;
 
