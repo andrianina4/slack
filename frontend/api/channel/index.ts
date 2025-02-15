@@ -11,3 +11,8 @@ export async function addChannel(body: TypeAddChannel) {
 
   return (await response.json()) as IChannel;
 }
+
+export const getMyChannel = async () => {
+  const response = await fetch("http://localhost/api/channel/getMyChannel");
+  return (await response.json()) as IChannel[];
+};

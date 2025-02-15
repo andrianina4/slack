@@ -7,6 +7,7 @@ export interface IUser {
 }
 
 export interface IChannel {
+  id: number;
   name: string;
   isPublic: boolean;
 }

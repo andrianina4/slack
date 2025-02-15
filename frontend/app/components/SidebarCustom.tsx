@@ -33,16 +33,28 @@ import { useAuth } from "../hooks/useAuth";
 import { getInitialName } from "@/lib";
 import { Earth, Lock } from "lucide-react";
 import DropdownCustom from "./DropdownCustom";
+import { useQuery } from "@tanstack/react-query";
+import { getMyChannel } from "@/api/channel";
+import { IChannel } from "@/interfaces/entity";
 
 type PropsGroupedMenu = {
   label: string;
+  channels: IChannel[];
 };
 
-const GroupedMenu = ({ label }: PropsGroupedMenu) => {
+const GroupedMenu = ({ label, channels }: PropsGroupedMenu) => {
+  const router = useRouter();
+  const publicChannel = channels.filter((item) => item.isPublic);
+  const privateChannel = channels.filter((item) => !item.isPublic);
+
+  const handleRoute = (id: number) => {
+    router.push(`/group/${id}`);
+  };
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-zinc-400">
-        <DropdownCustom title={label} />
+        <DropdownCustom title={`${label} (${channels.length})`} />
       </SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
@@ -52,15 +64,25 @@ const GroupedMenu = ({ label }: PropsGroupedMenu) => {
                 <SidebarMenuButton asChild>
                   <a href={"#"}>
                     <Earth />
-                    <span>Publique</span>
+                    <span>Publique ({publicChannel.length})</span>
                   </a>
                 </SidebarMenuButton>
               </CollapsibleTrigger>
 
               <CollapsibleContent>
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>#test-rh</SidebarMenuSubItem>
-                </SidebarMenuSub>
+                {publicChannel.map((item) => {
+                  return (
+                    <SidebarMenuSub key={item.id} className="cursor-pointer">
+                      <SidebarMenuSubItem
+                        onClick={() => {
+                          handleRoute(item.id);
+                        }}
+                      >
+                        {item.name}
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  );
+                })}
               </CollapsibleContent>
             </SidebarMenuItem>
 
@@ -69,15 +91,25 @@ const GroupedMenu = ({ label }: PropsGroupedMenu) => {
                 <SidebarMenuButton asChild>
                   <a href={"#"}>
                     <Lock />
-                    <span>Privée</span>
+                    <span>Privée ({privateChannel.length})</span>
                   </a>
                 </SidebarMenuButton>
               </CollapsibleTrigger>
 
               <CollapsibleContent>
-                <SidebarMenuSub>
-                  <SidebarMenuSubItem>#test-rh</SidebarMenuSubItem>
-                </SidebarMenuSub>
+                {privateChannel.map((item) => {
+                  return (
+                    <SidebarMenuSub key={item.id} className="cursor-pointer">
+                      <SidebarMenuSubItem
+                        onClick={() => {
+                          handleRoute(item.id);
+                        }}
+                      >
+                        {item.name}
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  );
+                })}
               </CollapsibleContent>
             </SidebarMenuItem>
           </Collapsible>
@@ -88,14 +120,25 @@ const GroupedMenu = ({ label }: PropsGroupedMenu) => {
 };
 
 export default function SidebarCustom() {
+  // Access the client
+  // const queryClient = useQueryClient();
+  // Queries
+  const { data } = useQuery({
+    queryKey: ["getMyChannel"],
+    queryFn: getMyChannel,
+  });
   const user = useAuth();
   const router = useRouter();
+
+  const channels = data || [];
+
+  console.log("data", data);
 
   return (
     <SidebarProvider>
       <Sidebar style={{ width: "300px" }}>
         <SidebarContent>
-          <GroupedMenu label="Listes des canaux" />
+          <GroupedMenu label="Listes des canaux" channels={channels} />
         </SidebarContent>
 
         <SidebarFooter className="cursor-pointer">

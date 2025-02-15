@@ -9,5 +9,5 @@ export default function page(props: {
     params: { groupId },
   } = props;
 
-  return <div>{groupId}</div>;
+  return <div></div>;
 }
