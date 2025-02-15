@@ -19,15 +19,13 @@ export class AuthController {
   google: GoogleProvider;
 
   @Get("/check-session")
-  async checkSession(ctx: Context) {
-    console.log("Check Session");
-
+  async checkSession(ctx: Context<User>) {
     if (!ctx.session) {
-      return new HttpResponseUnauthorized({ message: "No active session" });
+      return new HttpResponseUnauthorized({ status: 400, user: undefined });
     }
     return new HttpResponseOK({
-      message: "Session active",
-      user: ctx.session.get("userId"),
+      status: 200,
+      user: ctx.user,
     });
   }
 
@@ -35,7 +33,6 @@ export class AuthController {
   @UseSessions()
   @UserRequired()
   async logout(ctx: Context) {
-    console.log("MIDITRA ATO ZANY");
     await ctx.session!.destroy();
     return new HttpResponseNoContent();
   }
@@ -48,7 +45,6 @@ export class AuthController {
   @Get("/google/callback")
   async handleGoogleRedirection(ctx: Context<User>) {
     const { userInfo } = await this.google.getUserInfo<GoogleUserInfo>(ctx);
-
     if (!userInfo.email) {
       return new HttpResponseRedirect("/login?google=700");
     }
@@ -63,6 +59,8 @@ export class AuthController {
       user = new User();
       user.email = userInfo.email;
       user.password = "password_auth";
+      user.firstname = userInfo.given_name || "";
+      user.lastname = userInfo.family_name || "";
       await user.save();
     }
 

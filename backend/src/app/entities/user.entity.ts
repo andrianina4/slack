@@ -19,6 +19,12 @@ export class User extends UserWithPermissions {
   @Column()
   password: string;
 
+  @Column()
+  lastname: string;
+
+  @Column()
+  firstname: string;
+
   @OneToMany(() => GroupMembers, (group) => group.user)
   groupeMembers: GroupMembers[];
 }

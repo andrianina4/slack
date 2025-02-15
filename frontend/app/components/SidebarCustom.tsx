@@ -27,9 +27,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../hooks/useAuth";
 // import { useRouter } from "next/router";
 export default function SidebarCustom() {
-  // const router = useRouter();
+  const user = useAuth();
+  const router = useRouter();
 
   return (
     <SidebarProvider>
@@ -65,21 +68,27 @@ export default function SidebarCustom() {
         <SidebarFooter className="cursor-pointer">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <div className="flex items-center cursor-pointer">
+              <div className="flex items-center cursor-pointer gap-2.5">
                 <Avatar>
                   <AvatarImage src="https://github.com/shadcn.png" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
 
-                <div className="text-xs text-center grow font-semibold">
-                  Andrianina RAHERIMANANTSOA
+                <div className="text-xs text-left grow font-semibold">
+                  {user?.firstname} {user?.lastname}
                 </div>
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent style={{ width: "20%" }}>
               <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push("/profile");
+                }}
+              >
+                Profile
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={async () => {
                   await fetch("http://localhost/api/auth/logout", {
