@@ -8,7 +8,7 @@ import {
   ValidatePathParam,
 } from "@foal/core";
 import { ChannelService } from "../../services";
-import { User } from "../../entities";
+import { Messages, User } from "../../entities";
 import { TypePostMessageChannel } from "../../types";
 
 export class ChannelController {
@@ -51,6 +51,17 @@ export class ChannelController {
     );
   }
 
+  @Get("/getMessageDirect/:userId")
+  @UserRequired()
+  @ValidatePathParam("userId", { type: "number" })
+  async getMessageDirect(ctx: Context<User>) {
+    const userConnected = ctx.user;
+    const userId = ctx.request.params.userId;
+    return new HttpResponseOK(
+      await this.channelService.getMessageDirect(userConnected.id, userId)
+    );
+  }
+
   @Post("/postMessageChannel")
   @UserRequired()
   async postMessageChannel(ctx: Context<User>) {
@@ -67,5 +78,12 @@ export class ChannelController {
     return new HttpResponseOK(
       await this.channelService.postMessageChannel(data)
     );
+  }
+
+  @Get("/getMyConversation")
+  @UserRequired()
+  async getMyConversation(ctx: Context<User>) {
+    const users = await this.channelService.getMyConversation(ctx.user.id);
+    return new HttpResponseOK(users);
   }
 }

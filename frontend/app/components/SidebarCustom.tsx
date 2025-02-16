@@ -32,8 +32,8 @@ import { useAuth } from "../hooks/useAuth";
 import { Earth, Lock, User } from "lucide-react";
 import DropdownCustom from "./DropdownCustom";
 import { useQuery } from "@tanstack/react-query";
-import { getMyChannel } from "@/api/channel";
-import { IChannel } from "@/interfaces/entity";
+import { getMyChannel, getMyConversation } from "@/api/channel";
+import { IChannel, IUser } from "@/interfaces/entity";
 import AvatarCustom from "./AvatarCustom";
 
 type PropsGroupedMenu = {
@@ -46,8 +46,8 @@ const GroupedMenuChannel = ({ label, channels }: PropsGroupedMenu) => {
   const publicChannel = channels.filter((item) => item.isPublic);
   const privateChannel = channels.filter((item) => !item.isPublic);
 
-  const handleRoute = (id: number) => {
-    router.push(`/group/${id}`);
+  const handleRouteGroup = (id: number) => {
+    router.push(`/message/group/${id}`);
   };
 
   return (
@@ -74,7 +74,7 @@ const GroupedMenuChannel = ({ label, channels }: PropsGroupedMenu) => {
                     <SidebarMenuSub key={item.id} className="cursor-pointer">
                       <SidebarMenuSubItem
                         onClick={() => {
-                          handleRoute(item.id);
+                          handleRouteGroup(item.id);
                         }}
                       >
                         {item.name}
@@ -101,7 +101,7 @@ const GroupedMenuChannel = ({ label, channels }: PropsGroupedMenu) => {
                     <SidebarMenuSub key={item.id} className="cursor-pointer">
                       <SidebarMenuSubItem
                         onClick={() => {
-                          handleRoute(item.id);
+                          handleRouteGroup(item.id);
                         }}
                       >
                         {item.name}
@@ -118,7 +118,17 @@ const GroupedMenuChannel = ({ label, channels }: PropsGroupedMenu) => {
   );
 };
 
-const GroupeMenuDirect = () => {
+type PropsGroupeMenuDirect = {
+  users: IUser[];
+};
+
+const GroupeMenuDirect = ({ users }: PropsGroupeMenuDirect) => {
+  const router = useRouter();
+
+  const handleRouteDirect = (id: number) => {
+    router.push(`/message/direct/${id}`);
+  };
+
   return (
     <SidebarGroupContent>
       <SidebarMenu>
@@ -128,14 +138,26 @@ const GroupeMenuDirect = () => {
               <SidebarMenuButton asChild>
                 <a href={"#"}>
                   <User />
-                  <span>Message Direct</span>
+                  <span>Message Direct ({users.length})</span>
                 </a>
               </SidebarMenuButton>
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <SidebarMenuSub className="cursor-pointer">
-                <SidebarMenuSubItem>Mahaliana Murielle</SidebarMenuSubItem>
-              </SidebarMenuSub>
+              {users.map((user) => {
+                return (
+                  <SidebarMenuSub
+                    className="cursor-pointer"
+                    key={user.id}
+                    onClick={() => {
+                      handleRouteDirect(user.id);
+                    }}
+                  >
+                    <SidebarMenuSubItem>
+                      {user.firstname} {user.lastname}
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                );
+              })}
             </CollapsibleContent>
           </SidebarMenuItem>
         </Collapsible>
@@ -152,17 +174,24 @@ export default function SidebarCustom() {
     queryKey: ["getMyChannel"],
     queryFn: getMyChannel,
   });
+
+  const { data: userConversation } = useQuery({
+    queryKey: ["getMyConversation"],
+    queryFn: getMyConversation,
+  });
+
   const user = useAuth();
   const router = useRouter();
 
   const channels = data || [];
+  const listeUsers = userConversation || [];
 
   return (
     <SidebarProvider>
       <Sidebar style={{ width: "300px" }}>
         <SidebarContent>
           <GroupedMenuChannel label="Listes des canaux" channels={channels} />
-          <GroupeMenuDirect />
+          <GroupeMenuDirect users={listeUsers} />
         </SidebarContent>
 
         <SidebarFooter className="cursor-pointer">

@@ -79,6 +79,35 @@ export class ChannelService {
     return messages;
   }
 
+  async getMessageDirect(myId: number, userId: number) {
+    const messages = await Messages.createQueryBuilder("message")
+      .leftJoinAndSelect("message.sender", "sender") // Jointure avec l'expéditeur
+      .leftJoinAndSelect("message.recipentUser", "recipient") // Jointure avec le destinataire
+      .where(
+        "(message.sender.id = :userId1 AND message.recipentUser.id = :userId2) OR (message.sender.id = :userId2 AND message.recipentUser.id = :userId1)",
+        { userId1: myId, userId2: userId }
+      )
+      .andWhere("message.recipentGroup IS NULL") // Exclure les messages envoyés à un groupe
+      .getMany();
+    // const messages = await Messages.find({
+    //   where: {
+    //     recipentUser: {
+    //       id: userId,
+    //     },
+    //     sender: {
+    //       id: myId,
+    //     },
+    //   },
+    //   relations: {
+    //     sender: true,
+    //     recipentUser: true,
+    //     recipentGroup: true,
+    //   },
+    // });
+
+    return messages;
+  }
+
   async postMessageChannel(body: TypePostMessageChannel) {
     const { content, recipentChannelId, recipentUserlId, sender } = body;
 
@@ -96,8 +125,6 @@ export class ChannelService {
       if (channel) {
         newMessage.recipentGroup = channel;
       }
-
-      await newMessage.save();
     } else if (recipentUserlId) {
       const user = await User.findOne({
         where: {
@@ -109,6 +136,32 @@ export class ChannelService {
       }
     }
 
+    await newMessage.save();
+
     return newMessage;
+  }
+
+  async getMyConversation(userId: number) {
+    const users = await Messages.createQueryBuilder("message")
+      .leftJoinAndSelect("message.sender", "sender")
+      .leftJoinAndSelect("message.recipentUser", "recipient")
+      .leftJoinAndSelect("message.recipentGroup", "channel")
+      .where(
+        "(message.sender.id = :userId OR message.recipentUser.id = :userId) AND channel.id IS NULL",
+        { userId }
+      )
+      .select([
+        // "sender.id",
+        // "sender.lastname",
+        // "sender.firstname",
+        "recipient.id as id",
+        "recipient.lastname as lastname",
+        "recipient.firstname as firstname",
+        "recipient.email as email",
+        "recipient.password as password",
+      ])
+      .getRawMany();
+
+    return users;
   }
 }

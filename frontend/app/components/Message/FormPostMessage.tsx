@@ -19,7 +19,7 @@ export default function FormPostMessage({
   const mutation = useMutation({
     mutationFn: postMessageChannel,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getMessageChannel"] });
+      queryClient.invalidateQueries({ queryKey: ["getMessage"] });
     },
   });
   const handleClick = async () => {

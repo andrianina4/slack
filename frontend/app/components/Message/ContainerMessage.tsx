@@ -1,7 +1,7 @@
 import React from "react";
 import ShowMessage from "./ShowMessage";
 import { useQuery } from "@tanstack/react-query";
-import { getMessageChannel } from "@/api/channel";
+import { getMessageChannel, getMessageDirect } from "@/api/channel";
 
 type PropsContainerMessage = {
   id: number;
@@ -9,13 +9,13 @@ type PropsContainerMessage = {
 };
 
 export default function ContainerMessage({
+  isPrivateMessage,
   id,
-}: // isPrivateMessage,
-PropsContainerMessage) {
+}: PropsContainerMessage) {
   const { data } = useQuery({
-    queryKey: ["getMessageChannel"],
+    queryKey: ["getMessage"],
     queryFn: () => {
-      return getMessageChannel(id);
+      return isPrivateMessage ? getMessageDirect(id) : getMessageChannel(id);
     },
   });
 

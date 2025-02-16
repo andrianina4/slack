@@ -1,6 +1,7 @@
 import {
   IChannel,
   IMessage,
+  IUser,
   TypeAddChannel,
   TypePostMessageChannel,
 } from "@/interfaces/entity";
@@ -49,4 +50,18 @@ export const postMessageChannel = async (body: TypePostMessageChannel) => {
     }
   );
   return (await response.json()) as IMessage;
+};
+
+export const getMyConversation = async () => {
+  const response = await fetch(
+    `http://localhost/api/channel/getMyConversation`
+  );
+  return (await response.json()) as IUser[];
+};
+
+export const getMessageDirect = async (userId: number) => {
+  const response = await fetch(
+    `http://localhost/api/channel/getMessageDirect/${userId}`
+  );
+  return (await response.json()) as IMessage[];
 };

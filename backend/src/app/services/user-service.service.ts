@@ -26,4 +26,12 @@ export class UserService {
     }
     return await User.find();
   }
+
+  async getUserById(userId: number) {
+    return await User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+  }
 }

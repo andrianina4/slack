@@ -22,3 +22,8 @@ export async function getAllUser() {
   const response = await fetch("http://localhost/api/user/getAllUser");
   return (await response.json()) as IUser[];
 }
+
+export async function getUser(userId: number) {
+  const response = await fetch(`http://localhost/api/user/getUser/${userId}`);
+  return (await response.json()) as IUser;
+}

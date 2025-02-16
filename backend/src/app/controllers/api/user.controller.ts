@@ -6,6 +6,7 @@ import {
   HttpResponseOK,
   Post,
   UserRequired,
+  ValidatePathParam,
 } from "@foal/core";
 import { User } from "../../entities";
 import { UserService } from "../../services";
@@ -30,5 +31,13 @@ export class UserController {
   async getAllUser(ctx: Context<User>) {
     const user = ctx.user;
     return new HttpResponseOK(await this.userService.getAllUser(user));
+  }
+
+  @Get("/getUser/:userId")
+  @UserRequired()
+  @ValidatePathParam("userId", { type: "number" })
+  async getUser(ctx: Context<User>) {
+    const userId = ctx.request.params.userId;
+    return new HttpResponseOK(await this.userService.getUserById(userId));
   }
 }

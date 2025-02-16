@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Menubar,
   MenubarMenu,
@@ -12,33 +12,61 @@ import { Badge } from "@/components/ui/badge";
 import { UserRound } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getConfigChannel } from "@/api/channel";
+import { getUser } from "@/api/user";
 type PropsHearderMessage = {
   id: number;
+  isPrivateMessage?: boolean;
 };
 
-export default function HearderMessage({ id }: PropsHearderMessage) {
-  const { data } = useQuery({
+export default function HearderMessage({
+  id,
+  isPrivateMessage,
+}: PropsHearderMessage) {
+  const [stateHeader, setStateHeader] = useState({
+    title: "",
+    countMembers: 0,
+  });
+
+  const { data: user } = useQuery({
+    queryKey: ["getUser"],
+    queryFn: () => {
+      return getUser(id);
+    },
+  });
+  const { data: configChannel } = useQuery({
     queryKey: ["getConfigChannel"],
     queryFn: () => {
       return getConfigChannel(id);
     },
   });
 
-  if (!data) return null;
-
-  const { channel, members } = data;
+  useEffect(() => {
+    if (isPrivateMessage && user) {
+      setStateHeader({
+        title: `${user.firstname} ${user.lastname}`,
+        countMembers: 0,
+      });
+    } else if (!isPrivateMessage && configChannel) {
+      setStateHeader({
+        title: configChannel.channel.name,
+        countMembers: configChannel.members.length,
+      });
+    }
+  }, [isPrivateMessage, configChannel, user]);
 
   return (
     <div>
       <Menubar>
         <MenubarMenu>
-          <MenubarTrigger>{channel.name}</MenubarTrigger>
+          <MenubarTrigger>{stateHeader.title}</MenubarTrigger>
 
-          <div className="flex grow justify-end">
-            <Badge variant="outline">
-              <UserRound size={14} /> : {members.length}
-            </Badge>
-          </div>
+          {!isPrivateMessage && (
+            <div className="flex grow justify-end">
+              <Badge variant="outline">
+                <UserRound size={14} /> : {stateHeader.countMembers}
+              </Badge>
+            </div>
+          )}
           {/* <MenubarContent>
             <MenubarItem>
               New Tab <MenubarShortcut>⌘T</MenubarShortcut>

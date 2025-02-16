@@ -3,18 +3,16 @@ import React from "react";
 
 export default function page(props: {
   params: {
-    groupId: string;
+    userId: string;
   };
 }) {
   const {
-    params: { groupId },
+    params: { userId },
   } = props;
-
-  console.log("groupId", groupId);
 
   return (
     <div>
-      <MessageComponent id={Number(groupId)} />
+      <MessageComponent id={Number(userId)} isPrivateMessage={true} />
     </div>
   );
 }
