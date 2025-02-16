@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import HearderMessage from "./Message/HearderMessage";
 import { Textarea } from "@/components/ui/textarea";
 import ShowMessage from "./Message/ShowMessage";
+import ContainerMessage from "./Message/ContainerMessage";
 
 export default function MessageComponent({ channelId }: { channelId: number }) {
   return (
@@ -11,16 +12,10 @@ export default function MessageComponent({ channelId }: { channelId: number }) {
         <HearderMessage id={channelId} />
       </div>
       <div className="flex-1 overflow-y-scroll mt-20 mb-20">
-        <ShowMessage />
-        <ShowMessage />
-        <ShowMessage />
-        <ShowMessage />
-        <ShowMessage />
-        <ShowMessage />
-        <ShowMessage />
+        <ContainerMessage id={channelId} />
       </div>
 
-      <div className="fixed bottom-0 left-78 right-4 max-w-[calc(100vw-16rem)] mx-auto flex gap-2 items-center">
+      <div className="fixed bottom-2 left-78 right-4 max-w-[calc(100vw-16rem)] mx-auto flex gap-2 items-center">
         <Textarea placeholder="Envoyer un message" />
         <Button className="cursor-pointer">Envoyer</Button>
       </div>
