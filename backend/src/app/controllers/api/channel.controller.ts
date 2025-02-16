@@ -86,4 +86,13 @@ export class ChannelController {
     const users = await this.channelService.getMyConversation(ctx.user.id);
     return new HttpResponseOK(users);
   }
+
+  @Get("/getUserInChannel/:userId")
+  @UserRequired()
+  @ValidatePathParam("userId", { type: "number" })
+  async getUserInChannel(ctx: Context<User>) {
+    const userId = ctx.request.params.userId;
+    const results = await this.channelService.getUserInChannel(userId);
+    return new HttpResponseOK(results);
+  }
 }

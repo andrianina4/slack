@@ -1,5 +1,6 @@
 import {
   IChannel,
+  IGroupeMembers,
   IMessage,
   IUser,
   TypeAddChannel,
@@ -64,4 +65,11 @@ export const getMessageDirect = async (userId: number) => {
     `http://localhost/api/channel/getMessageDirect/${userId}`
   );
   return (await response.json()) as IMessage[];
+};
+
+export const getUserInChannel = async (channelId: number) => {
+  const response = await fetch(
+    `http://localhost/api/channel/getUserInChannel/${channelId}`
+  );
+  return (await response.json()) as IGroupeMembers[];
 };

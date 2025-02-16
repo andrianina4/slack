@@ -210,4 +210,19 @@ export class ChannelService {
 
     return uniqueArray;
   }
+
+  async getUserInChannel(channelId: number) {
+    const members = await GroupMembers.find({
+      where: {
+        channel: {
+          id: channelId,
+        },
+      },
+      relations: {
+        user: true,
+      },
+    });
+
+    return members;
+  }
 }

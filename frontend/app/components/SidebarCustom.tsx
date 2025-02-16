@@ -35,6 +35,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getMyChannel, getMyConversation } from "@/api/channel";
 import { IChannel, IUser } from "@/interfaces/entity";
 import AvatarCustom from "./AvatarCustom";
+import { Separator } from "@radix-ui/react-separator";
 
 type PropsGroupedMenu = {
   label: string;
@@ -197,6 +198,7 @@ export default function SidebarCustom() {
         </SidebarContent>
 
         <SidebarFooter className="cursor-pointer">
+          <Separator />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="flex items-center cursor-pointer gap-2.5">
