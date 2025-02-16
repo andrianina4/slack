@@ -4,6 +4,7 @@ import {
   IMessage,
   IUser,
   TypeAddChannel,
+  TypeAddMembers,
   TypePostMessageChannel,
 } from "@/interfaces/entity";
 import { IResponseGetConfigChannel } from "@/interfaces/responses";
@@ -72,4 +73,15 @@ export const getUserInChannel = async (channelId: number) => {
     `http://localhost/api/channel/getUserInChannel/${channelId}`
   );
   return (await response.json()) as IGroupeMembers[];
+};
+
+export const addMembers = async (body: TypeAddMembers) => {
+  const response = await fetch(`http://localhost/api/channel/addMembers`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  return (await response.json()) as unknown;
 };

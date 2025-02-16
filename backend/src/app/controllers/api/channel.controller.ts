@@ -95,4 +95,15 @@ export class ChannelController {
     const results = await this.channelService.getUserInChannel(userId);
     return new HttpResponseOK(results);
   }
+
+  @Post("/addMembers")
+  @UserRequired()
+  async addMembers(ctx: Context<User>) {
+    const userConnected = ctx.user;
+    const body = ctx.request.body;
+
+    return new HttpResponseOK(
+      await this.channelService.addMembers(body.userIds, body.channelId)
+    );
+  }
 }

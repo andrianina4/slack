@@ -1,3 +1,4 @@
+import { In } from "typeorm";
 import { Channel, GroupMembers, Messages, User } from "../entities";
 import { TypeAddChannel, TypePostMessageChannel } from "../types";
 
@@ -224,5 +225,34 @@ export class ChannelService {
     });
 
     return members;
+  }
+
+  async addMembers(userIds: number[], channelId: number) {
+    const users = await User.find({
+      where: {
+        id: In(userIds),
+      },
+    });
+
+    const channel = await Channel.findOne({
+      where: {
+        id: channelId,
+      },
+    });
+
+    if (channel && users.length) {
+      const promiseUser = users.map((item) => {
+        const newGroupMembers = new GroupMembers();
+        newGroupMembers.user = item;
+        newGroupMembers.channel = channel;
+        return newGroupMembers.save();
+      });
+
+      const results = await Promise.all(promiseUser);
+
+      return results;
+    }
+
+    return null;
   }
 }

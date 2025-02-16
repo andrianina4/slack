@@ -36,3 +36,8 @@ export type TypePostMessageChannel = {
   recipentUserId?: number;
   content: string;
 };
+
+export type TypeAddMembers = {
+  userIds: number[];
+  channelId: number;
+};
