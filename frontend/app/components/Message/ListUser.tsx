@@ -89,7 +89,13 @@ const FormInsertPersonne = ({ channelId }: PropsChannelId) => {
   );
 };
 
-export default function ListUser({ channelId }: PropsChannelId) {
+export default function ListUser({
+  channelId,
+  isOwner,
+}: {
+  channelId: number;
+  isOwner: boolean;
+}) {
   const { data } = useQuery({
     queryKey: ["getUserInChannel"],
     queryFn: () => {
@@ -102,7 +108,8 @@ export default function ListUser({ channelId }: PropsChannelId) {
   return (
     <div>
       <h2 className="mt-5 mb-5">Total : {data?.length}</h2>
-      <FormInsertPersonne channelId={channelId} />
+      {isOwner && <FormInsertPersonne channelId={channelId} />}
+
       <Separator />
 
       {options.map((item) => (

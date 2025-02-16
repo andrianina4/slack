@@ -81,7 +81,11 @@ export default function HearderMessage({
 
           {!isPrivateMessage && (
             <div className="flex grow justify-end">
-              <Badge variant="outline">
+              <Badge
+                variant="outline"
+                className="cursor-pointer"
+                onClick={() => setModalUser(true)}
+              >
                 <UserRound size={14} /> : {stateHeader.countMembers}
               </Badge>{" "}
               {owner && (
@@ -109,11 +113,7 @@ export default function HearderMessage({
         title={`#${configChannel?.channel.name}`}
         content={
           <div>
-            {/* <p>
-              Les conversations articulées autour d’un thème ont lieu dans les
-              canaux. Choisissez un nom simple et clair.
-            </p> */}
-            <ListUser channelId={id} />
+            <ListUser channelId={id} isOwner={Boolean(owner)} />
           </div>
         }
         onClose={(value) => setModalUser(value)}
