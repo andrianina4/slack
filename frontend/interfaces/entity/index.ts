@@ -24,6 +24,7 @@ export interface IMessage {
   sender: IUser | null;
   recipentUser: IUser | null;
   recipentGroup: IChannel | null;
+  timestamp: string;
 }
 
 export type TypeModifyUser = Pick<IUser, "firstname" | "lastname" | "id">;

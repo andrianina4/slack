@@ -74,9 +74,6 @@ export class ChannelService {
         recipentUser: true,
         recipentGroup: true,
       },
-      order: {
-        id: "DESC",
-      },
     });
 
     return messages;

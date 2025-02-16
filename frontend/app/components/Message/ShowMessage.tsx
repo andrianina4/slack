@@ -1,32 +1,41 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { IUser } from "@/interfaces/entity";
 import { getInitialName } from "@/lib";
+import { format, formatDistance, isSameDay } from "date-fns";
+import { fr } from "date-fns/locale";
+type PropsShowMessage = {
+  datas: {
+    content: string;
+    sender: IUser | null;
+    date: string;
+  };
+};
 
-export default function ShowMessage() {
+export default function ShowMessage({ datas }: PropsShowMessage) {
+  const { content, date, sender } = datas;
+
+  const dateParsed = date ? new Date(date) : new Date();
+  const duration = isSameDay(new Date(), dateParsed)
+    ? formatDistance(new Date(), dateParsed, {
+        locale: fr,
+      })
+    : format(dateParsed, "dd-mm-yyyy");
+
   return (
     <div className="mt-2.5 ml-1.5 flex gap-2.5 ">
       <Avatar>
         {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
         <AvatarFallback className="bg-amber-400">
-          {getInitialName("Andrianina")}
-          {getInitialName("RAHERIMANANTSOA")}
+          {getInitialName(sender?.firstname)}
+          {getInitialName(sender?.lastname)}
         </AvatarFallback>
       </Avatar>
       <div>
         <p className="font-semibold">
-          Andrianina RAHERIMANANTSOA{" "}
-          <span className="font-normal text-sm text-gray-500">16/02/2025</span>
+          {sender?.firstname} {sender?.lastname}{" "}
+          <span className="font-normal text-sm text-gray-500">{duration}</span>
         </p>
-        <p>
-          Hello , Oui , on a un problème au niveau de notre serveur J ai quand
-          même essayer de résoudre de mon coté mais ça ne marche pas Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Laboriosam maiores saepe
-          aperiam, ab non error culpa atque fugit repellat magnam velit
-          reprehenderit eum iusto voluptate illum eius modi quia deleniti. Lorem
-          ipsum dolor sit amet, consectetur adipisicing elit. Officia atque,
-          facere corrupti alias illum nemo, voluptatum aliquid voluptatibus
-          ullam delectus consequatur pariatur dolore obcaecati dolor ipsa
-          facilis suscipit repellendus optio.
-        </p>
+        <p>{content}</p>
       </div>
     </div>
   );

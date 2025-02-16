@@ -14,7 +14,7 @@ export default function page(props: {
 
   return (
     <div>
-      <MessageComponent channelId={Number(groupId)} />
+      <MessageComponent id={Number(groupId)} />
     </div>
   );
 }

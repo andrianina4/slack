@@ -5,9 +5,13 @@ import { getMessageChannel } from "@/api/channel";
 
 type PropsContainerMessage = {
   id: number;
+  isPrivateMessage?: boolean;
 };
 
-export default function ContainerMessage({ id }: PropsContainerMessage) {
+export default function ContainerMessage({
+  id,
+}: // isPrivateMessage,
+PropsContainerMessage) {
   const { data } = useQuery({
     queryKey: ["getMessageChannel"],
     queryFn: () => {
@@ -20,7 +24,16 @@ export default function ContainerMessage({ id }: PropsContainerMessage) {
   return (
     <div>
       {data.map((item, index) => {
-        return <ShowMessage key={index} />;
+        return (
+          <ShowMessage
+            key={index}
+            datas={{
+              content: item.content,
+              date: item.timestamp,
+              sender: item.sender,
+            }}
+          />
+        );
       })}
     </div>
   );

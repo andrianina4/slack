@@ -145,9 +145,9 @@ export default function SidebarCustom() {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="flex items-center cursor-pointer gap-2.5">
-                <Avatar>
+                <Avatar className=" text-white">
                   {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-[#424040]">
                     {getInitialName(user?.firstname)}
                     {getInitialName(user?.lastname)}
                   </AvatarFallback>
