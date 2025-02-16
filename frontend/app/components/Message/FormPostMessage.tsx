@@ -8,11 +8,13 @@ import { TypePostMessageChannel } from "@/interfaces/entity";
 type PropsFormPostMessage = {
   id: number;
   isPrivateMessage?: boolean;
+  cb?: () => void;
 };
 
 export default function FormPostMessage({
   id,
   isPrivateMessage,
+  cb,
 }: PropsFormPostMessage) {
   const [message, setMessage] = useState("");
   const queryClient = useQueryClient();
@@ -36,6 +38,8 @@ export default function FormPostMessage({
     mutation.mutate(bodySend);
 
     setMessage("");
+
+    if (cb) cb();
   };
 
   return (

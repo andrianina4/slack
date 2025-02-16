@@ -11,6 +11,7 @@ import ModalCustom from "./ModalCustom";
 import { FormGroup } from "./FormGroup";
 import { Separator } from "@/components/ui/separator";
 import { FormDirectMessage } from "./Message/FormDirectMessage";
+import { useQueryClient } from "@tanstack/react-query";
 
 type PropsDropdownCustom = {
   title: string;
@@ -19,7 +20,7 @@ type PropsDropdownCustom = {
 export default function DropdownCustom({ title }: PropsDropdownCustom) {
   const [state, setState] = useState(false);
   const [stateDirect, setStateDirect] = useState(false);
-
+  const queryClient = useQueryClient();
   return (
     <>
       <DropdownMenu>
@@ -53,7 +54,14 @@ export default function DropdownCustom({ title }: PropsDropdownCustom) {
 
             <Separator className="mt-2 mb-2" />
 
-            <FormGroup />
+            <FormGroup
+              cb={() => {
+                queryClient.invalidateQueries({
+                  queryKey: ["getMyChannel"],
+                });
+                setState(false);
+              }}
+            />
           </div>
         }
         onClose={(value) => setState(value)}
@@ -68,7 +76,15 @@ export default function DropdownCustom({ title }: PropsDropdownCustom) {
 
             <Separator className="mt-2 mb-2" />
 
-            <FormDirectMessage />
+            <FormDirectMessage
+              cb={() => {
+                queryClient.invalidateQueries({
+                  queryKey: ["getMyConversation"],
+                });
+
+                setStateDirect(false);
+              }}
+            />
           </div>
         }
         onClose={(value) => setStateDirect(value)}

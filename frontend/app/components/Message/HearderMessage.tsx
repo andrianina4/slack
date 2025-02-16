@@ -129,7 +129,10 @@ export default function HearderMessage({
         title={`#${configChannel?.channel.name}`}
         content={
           <div>
-            <FormGroup channel={configChannel?.channel} />
+            <FormGroup
+              channel={configChannel?.channel}
+              cb={() => setModalUpdate(false)}
+            />
           </div>
         }
         onClose={(value) => setModalUpdate(value)}

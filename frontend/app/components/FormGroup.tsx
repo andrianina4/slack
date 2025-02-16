@@ -28,9 +28,10 @@ const FormSchema = z.object({
 
 type PropsFormGroup = {
   channel?: IChannel;
+  cb?: () => void;
 };
 
-export function FormGroup({ channel }: PropsFormGroup) {
+export function FormGroup({ channel, cb }: PropsFormGroup) {
   const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -53,8 +54,11 @@ export function FormGroup({ channel }: PropsFormGroup) {
       await modifyChannel(channel.id, data);
       queryClient.invalidateQueries({ queryKey: ["getConfigChannel"] });
       queryClient.invalidateQueries({ queryKey: ["getMyChannel"] });
+
+      if (cb) cb();
     } else {
       await addChannel(data);
+      if (cb) cb();
     }
   }
 

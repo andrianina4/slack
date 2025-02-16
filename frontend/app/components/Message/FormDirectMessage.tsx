@@ -23,7 +23,11 @@ import { getAllUser } from "@/api/user";
 import { useQuery } from "@tanstack/react-query";
 import FormPostMessage from "./FormPostMessage";
 
-export function FormDirectMessage() {
+type PropsFormDirectMessage = {
+  cb?: () => void;
+};
+
+export function FormDirectMessage({ cb }: PropsFormDirectMessage) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<number>(0);
 
@@ -84,7 +88,7 @@ export function FormDirectMessage() {
 
       <div className="mt-5 flex items-center gap-2">
         {dataMapped && (
-          <FormPostMessage id={dataMapped.id} isPrivateMessage={true} />
+          <FormPostMessage id={dataMapped.id} isPrivateMessage={true} cb={cb} />
         )}
       </div>
     </div>
