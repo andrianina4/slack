@@ -34,6 +34,9 @@ const FormSchema = z.object({
   firstname: z.string({
     message: "Le prénom(s) est obligatoire",
   }),
+  password: z.string({
+    message: "Le mots de passe est obligatoire",
+  }),
 });
 
 type PropsFormProfile = {
@@ -51,6 +54,7 @@ export function FormProfile({ user }: PropsFormProfile) {
       email: "",
       firstname: "",
       lastname: "",
+      password: "",
     },
   });
 
@@ -59,6 +63,7 @@ export function FormProfile({ user }: PropsFormProfile) {
       form.setValue("email", user.email);
       form.setValue("firstname", user.firstname);
       form.setValue("lastname", user.lastname);
+      form.setValue("password", user.password);
     }
   }, [user, form]);
 
@@ -120,6 +125,21 @@ export function FormProfile({ user }: PropsFormProfile) {
               <FormLabel>Prénoms</FormLabel>
               <FormControl>
                 <Input placeholder="Prénom(s)" {...field} />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Mots de passe</FormLabel>
+              <FormControl>
+                <Input placeholder="Mots de passe" {...field} type="password" />
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />

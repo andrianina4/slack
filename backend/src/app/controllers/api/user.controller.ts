@@ -2,6 +2,7 @@ import {
   Context,
   dependency,
   Get,
+  hashPassword,
   HttpResponseNotFound,
   HttpResponseOK,
   Post,
@@ -19,6 +20,8 @@ export class UserController {
   @UserRequired()
   async modifyUser(ctx: Context<User>) {
     const body = ctx.request.body;
+
+    body.password = await hashPassword(body.password);
 
     const results = await this.userService.modifyUser(body);
 

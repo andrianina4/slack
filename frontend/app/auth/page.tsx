@@ -2,11 +2,14 @@
 import { login } from "@/api/user";
 import { IUser } from "@/interfaces/entity";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const SignInForm = () => {
+  const router = useRouter();
+
   const FormSchema = z.object({
     email: z
       .string({})
@@ -53,6 +56,7 @@ const SignInForm = () => {
         });
       }
     } else {
+      router.push("/");
     }
   };
 
