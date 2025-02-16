@@ -136,6 +136,11 @@ export class ChannelService {
         where: {
           id: recipentChannelId,
         },
+        relations: {
+          groupeMembers: {
+            user: true,
+          },
+        },
       });
 
       if (channel) {

@@ -115,7 +115,7 @@ export default function HearderMessage({
 
       <ModalCustom
         open={modalUser}
-        title={`#${configChannel?.channel.name}`}
+        title={stateHeader.title}
         content={
           <div>
             <ListUser channelId={id} isOwner={Boolean(owner)} />
@@ -126,7 +126,8 @@ export default function HearderMessage({
 
       <ModalCustom
         open={modalUpdate}
-        title={`#${configChannel?.channel.name}`}
+        // title={`#${configChannel ? configChannel?.channel.name : ""}`}
+        title={stateHeader.title}
         content={
           <div>
             <FormGroup

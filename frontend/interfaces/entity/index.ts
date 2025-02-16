@@ -10,6 +10,7 @@ export interface IChannel {
   id: number;
   name: string;
   isPublic: boolean;
+  groupeMembers: IGroupeMembers[];
 }
 
 export interface IGroupeMembers {

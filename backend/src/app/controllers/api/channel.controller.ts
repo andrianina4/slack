@@ -11,8 +11,12 @@ import {
 import { ChannelService } from "../../services";
 import { Messages, User } from "../../entities";
 import { TypePostMessageChannel } from "../../types";
+import { WsServer } from "@foal/socket.io";
 
 export class ChannelController {
+  @dependency
+  wsServer: WsServer;
+
   @dependency
   channelService: ChannelService;
 

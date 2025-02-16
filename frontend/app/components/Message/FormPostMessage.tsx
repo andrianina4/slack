@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postMessageChannel } from "@/api/channel";
 import { TypePostMessageChannel } from "@/interfaces/entity";
+import { useAuth } from "@/app/hooks/useAuth";
+import { useSocket } from "../socket/SocketProvider";
 
 type PropsFormPostMessage = {
   id: number;
@@ -16,12 +18,25 @@ export default function FormPostMessage({
   isPrivateMessage,
   cb,
 }: PropsFormPostMessage) {
-  const [message, setMessage] = useState("");
+  const auth = useAuth();
+  const socket = useSocket();
   const queryClient = useQueryClient();
+
+  const [message, setMessage] = useState("");
   const mutation = useMutation({
     mutationFn: postMessageChannel,
-    onSuccess: () => {
+    onSuccess: (responseBackend) => {
       queryClient.invalidateQueries({ queryKey: ["getMessage"] });
+
+      socket?.emit("sendMessage", {
+        senderId: auth?.id,
+        receiverId: isPrivateMessage
+          ? responseBackend.recipentUser?.id
+          : responseBackend.recipentGroup?.groupeMembers.map(
+              (item) => item.user.id
+            ),
+        content: responseBackend.content,
+      });
     },
   });
   const handleClick = async () => {
