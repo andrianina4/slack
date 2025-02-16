@@ -3,6 +3,7 @@ import {
   dependency,
   Get,
   HttpResponseOK,
+  Patch,
   Post,
   UserRequired,
   ValidatePathParam,
@@ -20,6 +21,16 @@ export class ChannelController {
   async addChannel(ctx: Context<User>) {
     const body = ctx.request.body;
     const results = await this.channelService.addChannel(body, ctx.user);
+    return new HttpResponseOK(results);
+  }
+
+  @Patch("/modifyChannel/:channelId")
+  @UserRequired()
+  @ValidatePathParam("channelId", { type: "number" })
+  async modifyChannel(ctx: Context<User>) {
+    const body = ctx.request.body;
+    const channelId = ctx.request.params.channelId;
+    const results = await this.channelService.modifyChannel(channelId, body);
     return new HttpResponseOK(results);
   }
 

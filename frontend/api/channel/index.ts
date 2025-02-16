@@ -85,3 +85,18 @@ export const addMembers = async (body: TypeAddMembers) => {
   });
   return (await response.json()) as unknown;
 };
+
+export async function modifyChannel(channelId: number, body: TypeAddChannel) {
+  const response = await fetch(
+    `http://localhost/api/channel/modifyChannel/${channelId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  );
+
+  return (await response.json()) as IChannel;
+}

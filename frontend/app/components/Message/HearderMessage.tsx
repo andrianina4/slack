@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import {
   Menubar,
@@ -25,6 +26,7 @@ import {
 import ModalCustom from "../ModalCustom";
 import ListUser from "./ListUser";
 import { useAuth } from "@/app/hooks/useAuth";
+import { FormGroup } from "../FormGroup";
 type PropsHearderMessage = {
   id: number;
   isPrivateMessage?: boolean;
@@ -36,6 +38,7 @@ export default function HearderMessage({
 }: PropsHearderMessage) {
   const auth = useAuth();
   const [modalUser, setModalUser] = useState(false);
+  const [modalUpdate, setModalUpdate] = useState(false);
 
   const [stateHeader, setStateHeader] = useState({
     title: "",
@@ -96,7 +99,9 @@ export default function HearderMessage({
                   <DropdownMenuContent>
                     <DropdownMenuLabel>Paramètres</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Modifier ce groupe</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setModalUpdate(true)}>
+                      Modifier ce groupe
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setModalUser(true)}>
                       Ajouter une personne
                     </DropdownMenuItem>
@@ -117,6 +122,17 @@ export default function HearderMessage({
           </div>
         }
         onClose={(value) => setModalUser(value)}
+      />
+
+      <ModalCustom
+        open={modalUpdate}
+        title={`#${configChannel?.channel.name}`}
+        content={
+          <div>
+            <FormGroup channel={configChannel?.channel} />
+          </div>
+        }
+        onClose={(value) => setModalUpdate(value)}
       />
     </div>
   );

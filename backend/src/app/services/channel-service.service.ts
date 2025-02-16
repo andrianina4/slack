@@ -18,6 +18,21 @@ export class ChannelService {
     return newGroup;
   }
 
+  async modifyChannel(channelId: number, body: TypeAddChannel) {
+    const channel = await Channel.findOne({
+      where: {
+        id: channelId,
+      },
+    });
+
+    if (channel) {
+      Object.assign(channel, body);
+      await channel.save();
+    }
+
+    return channel;
+  }
+
   async getMyChannel(userId: number) {
     const channels = await Channel.find({
       where: {

@@ -16,14 +16,23 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { addChannel } from "@/api/channel";
+import { addChannel, modifyChannel } from "@/api/channel";
+import { IChannel } from "@/interfaces/entity";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const FormSchema = z.object({
   name: z.string({}).min(1, "Le nom du canal est obligatoire"),
   isPublic: z.boolean(),
 });
 
-export function FormGroup() {
+type PropsFormGroup = {
+  channel?: IChannel;
+};
+
+export function FormGroup({ channel }: PropsFormGroup) {
+  const queryClient = useQueryClient();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -32,8 +41,21 @@ export function FormGroup() {
     },
   });
 
+  useEffect(() => {
+    if (channel) {
+      form.setValue("name", channel.name);
+      form.setValue("isPublic", channel.isPublic);
+    }
+  }, [channel, form]);
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    await addChannel(data);
+    if (channel) {
+      await modifyChannel(channel.id, data);
+      queryClient.invalidateQueries({ queryKey: ["getConfigChannel"] });
+      queryClient.invalidateQueries({ queryKey: ["getMyChannel"] });
+    } else {
+      await addChannel(data);
+    }
   }
 
   console.log({ error: form.formState.errors });
@@ -85,7 +107,7 @@ export function FormGroup() {
         />
 
         <Button type="submit" className="cursor-pointer">
-          Enregistrer
+          {channel ? "Modifier" : "Enregistrer"}
         </Button>
       </form>
     </Form>
