@@ -1,17 +1,24 @@
 import { getCheckSession } from "@/api/user";
 import { IUser } from "@/interfaces/entity";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+// import { useEffect, useState } from "react";
 
 export const useAuth = () => {
-  const [userConnected, setUserConnected] = useState<IUser | null>(null);
+  const { data } = useQuery({
+    queryKey: ["getCheckSession"],
+    queryFn: getCheckSession,
+  });
 
-  useEffect(() => {
-    (async () => {
-      const user = await getCheckSession();
-      if (user.status === 200) setUserConnected(user.user as IUser);
-    })();
-    return () => {};
-  }, []);
+  // const [userConnected, setUserConnected] = useState<IUser | null>(null);
 
-  return userConnected;
+  // useEffect(() => {
+  //   (async () => {
+  //     const user = await getCheckSession();
+  //     if (user.status === 200) setUserConnected(user.user as IUser);
+  //   })();
+  //   return () => {};
+  // }, []);
+
+  if (data) return data.user as IUser;
+  else return null;
 };

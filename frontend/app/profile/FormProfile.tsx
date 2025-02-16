@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { IUser } from "@/interfaces/entity";
 import { useEffect } from "react";
 import { modifyUser } from "@/api/user";
+import { useQueryClient } from "@tanstack/react-query";
 const FormSchema = z.object({
   email: z
     .string({
@@ -40,6 +41,8 @@ type PropsFormProfile = {
 };
 
 export function FormProfile({ user }: PropsFormProfile) {
+  const queryClient = useQueryClient();
+
   const editMode = Boolean(user);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -62,6 +65,7 @@ export function FormProfile({ user }: PropsFormProfile) {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (user) {
       await modifyUser({ ...data, id: user.id });
+      queryClient.invalidateQueries({ queryKey: ["getCheckSession"] });
     }
   }
 
