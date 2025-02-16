@@ -84,7 +84,7 @@ export function FormDirectMessage() {
 
       <div className="mt-5 flex items-center gap-2">
         {dataMapped && (
-          <FormPostMessage id={dataMapped.id} isDirectMessage={true} />
+          <FormPostMessage id={dataMapped.id} isPrivateMessage={true} />
         )}
       </div>
     </div>

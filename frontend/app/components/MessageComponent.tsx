@@ -21,7 +21,7 @@ export default function MessageComponent({
       </div>
 
       <div className="fixed bottom-2 left-78 right-4 max-w-[calc(100vw-16rem)] mx-auto flex gap-2 items-center">
-        <FormPostMessage id={id} />
+        <FormPostMessage id={id} isPrivateMessage={isPrivateMessage} />
       </div>
     </div>
   );

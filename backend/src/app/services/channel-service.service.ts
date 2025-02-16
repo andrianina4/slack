@@ -105,7 +105,7 @@ export class ChannelService {
     //   },
     // });
 
-    return messages;
+    return messages.sort((a, b) => a.id - b.id);
   }
 
   async postMessageChannel(body: TypePostMessageChannel) {
@@ -142,7 +142,20 @@ export class ChannelService {
   }
 
   async getMyConversation(userId: number) {
-    const users = await Messages.createQueryBuilder("message")
+    type ResponseQuery = {
+      sender_id: number;
+      sender_email: string;
+      sender_password: string;
+      sender_lastname: string;
+      sender_firstname: string;
+      id: number;
+      lastname: string;
+      firstname: string;
+      email: string;
+      password: string;
+    };
+
+    const users = (await Messages.createQueryBuilder("message")
       .leftJoinAndSelect("message.sender", "sender")
       .leftJoinAndSelect("message.recipentUser", "recipient")
       .leftJoinAndSelect("message.recipentGroup", "channel")
@@ -151,17 +164,50 @@ export class ChannelService {
         { userId }
       )
       .select([
-        // "sender.id",
-        // "sender.lastname",
-        // "sender.firstname",
+        "sender.id",
+        "sender.lastname",
+        "sender.firstname",
+        "sender.email",
+        "sender.password",
+
         "recipient.id as id",
         "recipient.lastname as lastname",
         "recipient.firstname as firstname",
         "recipient.email as email",
         "recipient.password as password",
       ])
-      .getRawMany();
+      .getRawMany()) as ResponseQuery[];
 
-    return users;
+    const filtre = users.map((item) => {
+      const datas = {
+        id: 0,
+        lastname: "",
+        firstname: "",
+        email: "",
+        password: "",
+      };
+
+      if (item.id === Number(userId)) {
+        // C'est à dire que celui qui regarde maintenant est le recepteur
+        datas.id = item.sender_id;
+        datas.email = item.sender_email;
+        datas.firstname = item.sender_firstname;
+        datas.lastname = item.sender_lastname;
+        datas.password = item.sender_password;
+      } else {
+        datas.id = item.id;
+        datas.email = item.email;
+        datas.firstname = item.firstname;
+        datas.lastname = item.lastname;
+        datas.password = item.password;
+      }
+      return datas;
+    });
+
+    const uniqueArray = Array.from(
+      new Map(filtre.map((item) => [item.id, item])).values()
+    );
+
+    return uniqueArray;
   }
 }

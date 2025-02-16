@@ -7,12 +7,12 @@ import { TypePostMessageChannel } from "@/interfaces/entity";
 
 type PropsFormPostMessage = {
   id: number;
-  isDirectMessage?: boolean;
+  isPrivateMessage?: boolean;
 };
 
 export default function FormPostMessage({
   id,
-  isDirectMessage,
+  isPrivateMessage,
 }: PropsFormPostMessage) {
   const [message, setMessage] = useState("");
   const queryClient = useQueryClient();
@@ -27,7 +27,7 @@ export default function FormPostMessage({
       content: message,
     };
 
-    if (isDirectMessage) {
+    if (isPrivateMessage) {
       bodySend.recipentUserId = id;
     } else {
       bodySend.recipentChannelId = id;
