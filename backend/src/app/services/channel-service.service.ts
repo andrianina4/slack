@@ -32,6 +32,12 @@ export class ChannelService {
   }
 
   async getConfigChannel(channelId: number) {
+    const channel = Channel.findOne({
+      where: {
+        id: channelId,
+      },
+    });
+
     const groupsMembers = GroupMembers.find({
       where: {
         channel: {
@@ -43,30 +49,32 @@ export class ChannelService {
       },
     });
 
-    const messages = Messages.find({
-      where: {
-        recipentGroup: {
-          id: channelId,
-        },
-      },
-      relations: {
-        sender: true,
-        recipentUser: true,
-        recipentGroup: true,
-      },
-      order: {
-        id: "DESC",
-      },
-    });
+    // const messages = Messages.find({
+    //   where: {
+    //     recipentGroup: {
+    //       id: channelId,
+    //     },
+    //   },
+    //   relations: {
+    //     sender: true,
+    //     recipentUser: true,
+    //     recipentGroup: true,
+    //   },
+    //   order: {
+    //     id: "DESC",
+    //   },
+    // });
 
-    const [resMembers, resMessage] = await Promise.all([
+    const [resMembers, resChannel] = await Promise.all([
       groupsMembers,
-      messages,
+      // messages,
+      channel,
     ]);
 
     return {
       members: resMembers,
-      messages: resMessage,
+      // messages: resMessage,
+      channel: resChannel,
     };
   }
 }

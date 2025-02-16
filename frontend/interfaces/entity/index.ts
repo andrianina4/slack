@@ -12,6 +12,20 @@ export interface IChannel {
   isPublic: boolean;
 }
 
+export interface IGroupeMembers {
+  id: number;
+  channel: IChannel;
+  isOwner: boolean;
+  user: IUser;
+}
+
+export interface IMessage {
+  content: string;
+  sender: IUser | null;
+  recipentUser: IUser | null;
+  recipentGroup: IChannel | null;
+}
+
 export type TypeModifyUser = Pick<IUser, "firstname" | "lastname" | "id">;
 
 export type TypeAddChannel = Pick<IChannel, "name" | "isPublic">;

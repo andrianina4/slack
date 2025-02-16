@@ -1,3 +1,4 @@
+import MessageComponent from "@/app/components/MessageComponent";
 import React from "react";
 
 export default function page(props: {
@@ -9,5 +10,11 @@ export default function page(props: {
     params: { groupId },
   } = props;
 
-  return <div></div>;
+  console.log("groupId", groupId);
+
+  return (
+    <div>
+      <MessageComponent channelId={Number(groupId)} />
+    </div>
+  );
 }
