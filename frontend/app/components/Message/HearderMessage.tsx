@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import ModalCustom from "../ModalCustom";
 import ListUser from "./ListUser";
+import { useAuth } from "@/app/hooks/useAuth";
 type PropsHearderMessage = {
   id: number;
   isPrivateMessage?: boolean;
@@ -33,6 +34,7 @@ export default function HearderMessage({
   id,
   isPrivateMessage,
 }: PropsHearderMessage) {
+  const auth = useAuth();
   const [modalUser, setModalUser] = useState(false);
 
   const [stateHeader, setStateHeader] = useState({
@@ -67,6 +69,10 @@ export default function HearderMessage({
     }
   }, [isPrivateMessage, configChannel, user]);
 
+  const owner = configChannel?.members.find(
+    (item) => item.user.id === auth?.id && item.isOwner
+  );
+
   return (
     <div>
       <Menubar>
@@ -78,19 +84,21 @@ export default function HearderMessage({
               <Badge variant="outline">
                 <UserRound size={14} /> : {stateHeader.countMembers}
               </Badge>{" "}
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <EllipsisVertical className="cursor-pointer" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>Paramètres</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Modifier ce groupe</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setModalUser(true)}>
-                    Ajouter une personne
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {owner && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <EllipsisVertical className="cursor-pointer" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Paramètres</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Modifier ce groupe</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setModalUser(true)}>
+                      Ajouter une personne
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
           )}
         </MenubarMenu>
