@@ -3,12 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postMessageChannel } from "@/api/channel";
+import { TypePostMessageChannel } from "@/interfaces/entity";
 
 type PropsFormPostMessage = {
   id: number;
+  isDirectMessage?: boolean;
 };
 
-export default function FormPostMessage({ id }: PropsFormPostMessage) {
+export default function FormPostMessage({
+  id,
+  isDirectMessage,
+}: PropsFormPostMessage) {
   const [message, setMessage] = useState("");
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -18,15 +23,17 @@ export default function FormPostMessage({ id }: PropsFormPostMessage) {
     },
   });
   const handleClick = async () => {
-    console.log({
-      recipentChannelId: id,
-      message,
-    });
-
-    mutation.mutate({
+    const bodySend: TypePostMessageChannel = {
       content: message,
-      recipentChannelId: id,
-    });
+    };
+
+    if (isDirectMessage) {
+      bodySend.recipentUserId = id;
+    } else {
+      bodySend.recipentChannelId = id;
+    }
+
+    mutation.mutate(bodySend);
 
     setMessage("");
   };

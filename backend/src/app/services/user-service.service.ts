@@ -1,3 +1,4 @@
+import { Not } from "typeorm";
 import { User } from "../entities";
 import { TypeModifyUser } from "../types";
 
@@ -13,5 +14,16 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async getAllUser(getAllExecpt?: User) {
+    if (getAllExecpt) {
+      return await User.find({
+        where: {
+          id: Not(getAllExecpt.id),
+        },
+      });
+    }
+    return await User.find();
   }
 }

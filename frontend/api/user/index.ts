@@ -17,3 +17,8 @@ export async function modifyUser(body: TypeModifyUser) {
 
   return (await response.json()) as IUser;
 }
+
+export async function getAllUser() {
+  const response = await fetch("http://localhost/api/user/getAllUser");
+  return (await response.json()) as IUser[];
+}

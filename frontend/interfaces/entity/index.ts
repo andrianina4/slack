@@ -32,6 +32,7 @@ export type TypeModifyUser = Pick<IUser, "firstname" | "lastname" | "id">;
 export type TypeAddChannel = Pick<IChannel, "name" | "isPublic">;
 
 export type TypePostMessageChannel = {
-  recipentChannelId: number;
+  recipentChannelId?: number;
+  recipentUserId?: number;
   content: string;
 };

@@ -10,6 +10,7 @@ import { CirclePlus } from "lucide-react";
 import ModalCustom from "./ModalCustom";
 import { FormGroup } from "./FormGroup";
 import { Separator } from "@/components/ui/separator";
+import { FormDirectMessage } from "./Message/FormDirectMessage";
 
 type PropsDropdownCustom = {
   title: string;
@@ -17,6 +18,7 @@ type PropsDropdownCustom = {
 
 export default function DropdownCustom({ title }: PropsDropdownCustom) {
   const [state, setState] = useState(false);
+  const [stateDirect, setStateDirect] = useState(false);
 
   return (
     <>
@@ -30,6 +32,10 @@ export default function DropdownCustom({ title }: PropsDropdownCustom) {
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={() => setState(true)}>
               Créer un canal
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={() => setStateDirect(true)}>
+              Commencer une message direct
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
@@ -51,6 +57,21 @@ export default function DropdownCustom({ title }: PropsDropdownCustom) {
           </div>
         }
         onClose={(value) => setState(value)}
+      />
+
+      <ModalCustom
+        open={stateDirect}
+        title="Message direct"
+        content={
+          <div>
+            <p>Seuls vous et la personne pouvez voir les messages.</p>
+
+            <Separator className="mt-2 mb-2" />
+
+            <FormDirectMessage />
+          </div>
+        }
+        onClose={(value) => setStateDirect(value)}
       />
     </>
   );

@@ -24,4 +24,11 @@ export class UserController {
     if (results) return new HttpResponseOK(results);
     else return new HttpResponseNotFound("user not found in db");
   }
+
+  @Get("/getAllUser")
+  @UserRequired()
+  async getAllUser(ctx: Context<User>) {
+    const user = ctx.user;
+    return new HttpResponseOK(await this.userService.getAllUser(user));
+  }
 }

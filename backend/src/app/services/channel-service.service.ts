@@ -80,22 +80,34 @@ export class ChannelService {
   }
 
   async postMessageChannel(body: TypePostMessageChannel) {
-    const { content, recipentChannelId, sender } = body;
-
-    const channel = await Channel.findOne({
-      where: {
-        id: recipentChannelId,
-      },
-    });
+    const { content, recipentChannelId, recipentUserlId, sender } = body;
 
     const newMessage = new Messages();
     newMessage.content = content;
     newMessage.sender = sender;
-    if (channel) {
-      newMessage.recipentGroup = channel;
-    }
 
-    await newMessage.save();
+    if (recipentChannelId) {
+      const channel = await Channel.findOne({
+        where: {
+          id: recipentChannelId,
+        },
+      });
+
+      if (channel) {
+        newMessage.recipentGroup = channel;
+      }
+
+      await newMessage.save();
+    } else if (recipentUserlId) {
+      const user = await User.findOne({
+        where: {
+          id: recipentUserlId,
+        },
+      });
+      if (user) {
+        newMessage.recipentUser = user;
+      }
+    }
 
     return newMessage;
   }

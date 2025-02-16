@@ -19,7 +19,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,19 +29,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
-import { getInitialName } from "@/lib";
-import { Earth, Lock } from "lucide-react";
+import { Earth, Lock, User } from "lucide-react";
 import DropdownCustom from "./DropdownCustom";
 import { useQuery } from "@tanstack/react-query";
 import { getMyChannel } from "@/api/channel";
 import { IChannel } from "@/interfaces/entity";
+import AvatarCustom from "./AvatarCustom";
 
 type PropsGroupedMenu = {
   label: string;
   channels: IChannel[];
 };
 
-const GroupedMenu = ({ label, channels }: PropsGroupedMenu) => {
+const GroupedMenuChannel = ({ label, channels }: PropsGroupedMenu) => {
   const router = useRouter();
   const publicChannel = channels.filter((item) => item.isPublic);
   const privateChannel = channels.filter((item) => !item.isPublic);
@@ -119,6 +118,32 @@ const GroupedMenu = ({ label, channels }: PropsGroupedMenu) => {
   );
 };
 
+const GroupeMenuDirect = () => {
+  return (
+    <SidebarGroupContent>
+      <SidebarMenu>
+        <Collapsible defaultOpen className="group/collapsible">
+          <SidebarMenuItem>
+            <CollapsibleTrigger asChild>
+              <SidebarMenuButton asChild>
+                <a href={"#"}>
+                  <User />
+                  <span>Message Direct</span>
+                </a>
+              </SidebarMenuButton>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarMenuSub className="cursor-pointer">
+                <SidebarMenuSubItem>Mahaliana Murielle</SidebarMenuSubItem>
+              </SidebarMenuSub>
+            </CollapsibleContent>
+          </SidebarMenuItem>
+        </Collapsible>
+      </SidebarMenu>
+    </SidebarGroupContent>
+  );
+};
+
 export default function SidebarCustom() {
   // Access the client
   // const queryClient = useQueryClient();
@@ -132,27 +157,19 @@ export default function SidebarCustom() {
 
   const channels = data || [];
 
-  console.log("data", data);
-
   return (
     <SidebarProvider>
       <Sidebar style={{ width: "300px" }}>
         <SidebarContent>
-          <GroupedMenu label="Listes des canaux" channels={channels} />
+          <GroupedMenuChannel label="Listes des canaux" channels={channels} />
+          <GroupeMenuDirect />
         </SidebarContent>
 
         <SidebarFooter className="cursor-pointer">
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="flex items-center cursor-pointer gap-2.5">
-                <Avatar className=" text-white">
-                  {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-                  <AvatarFallback className="bg-[#424040]">
-                    {getInitialName(user?.firstname)}
-                    {getInitialName(user?.lastname)}
-                  </AvatarFallback>
-                </Avatar>
-
+                <AvatarCustom user={user} />
                 <div className="text-xs text-left grow font-semibold">
                   {user?.firstname} {user?.lastname}
                 </div>

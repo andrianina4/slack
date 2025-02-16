@@ -59,7 +59,8 @@ export class ChannelController {
 
     const data: TypePostMessageChannel = {
       content: body.content,
-      recipentChannelId: body.recipentChannelId,
+      recipentChannelId: body?.recipentChannelId,
+      recipentUserlId: body?.recipentUserId,
       sender: userConnected,
     };
 

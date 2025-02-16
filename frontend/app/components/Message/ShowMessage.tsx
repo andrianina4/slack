@@ -1,8 +1,7 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { IUser } from "@/interfaces/entity";
-import { getInitialName } from "@/lib";
 import { format, formatDistance, isSameDay } from "date-fns";
 import { fr } from "date-fns/locale";
+import AvatarCustom from "../AvatarCustom";
 type PropsShowMessage = {
   datas: {
     content: string;
@@ -23,13 +22,7 @@ export default function ShowMessage({ datas }: PropsShowMessage) {
 
   return (
     <div className="mt-2.5 ml-1.5 flex gap-2.5 ">
-      <Avatar>
-        {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-        <AvatarFallback className="bg-amber-400">
-          {getInitialName(sender?.firstname)}
-          {getInitialName(sender?.lastname)}
-        </AvatarFallback>
-      </Avatar>
+      <AvatarCustom user={sender} />
       <div>
         <p className="font-semibold">
           {sender?.firstname} {sender?.lastname}{" "}
