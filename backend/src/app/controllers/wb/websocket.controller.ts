@@ -22,6 +22,28 @@ export class WebsocketController extends SocketIOController {
       userId: payload.userId,
       id: ctx.socket.id,
     });
+
+    ctx.socket.broadcast.emit("userStatus", {
+      userId: payload.userId,
+      status: 1,
+    });
+
+    return new WebsocketResponse();
+  }
+
+  @EventName("disconect")
+  async disconect(ctx: WebsocketContext, payload: { userId: string }) {
+    // this.users.set(payload.userId, ctx.socket.id);s
+    console.log("DECONNEXION_CHAT", {
+      userId: payload.userId,
+      id: ctx.socket.id,
+    });
+
+    ctx.socket.broadcast.emit("userStatus", {
+      userId: payload.userId,
+      status: 0,
+    });
+
     return new WebsocketResponse();
   }
 

@@ -56,6 +56,8 @@ export default function DropdownCustom({ title }: PropsDropdownCustom) {
 
             <FormGroup
               cb={() => {
+                console.log("Evaluted");
+
                 queryClient.invalidateQueries({
                   queryKey: ["getMyChannel"],
                 });
@@ -78,6 +80,8 @@ export default function DropdownCustom({ title }: PropsDropdownCustom) {
 
             <FormDirectMessage
               cb={() => {
+                console.log("getMyConversation");
+
                 queryClient.invalidateQueries({
                   queryKey: ["getMyConversation"],
                 });

@@ -36,6 +36,9 @@ import { getMyChannel, getMyConversation } from "@/api/channel";
 import { IChannel, IUser } from "@/interfaces/entity";
 import AvatarCustom from "./AvatarCustom";
 import { Separator } from "@radix-ui/react-separator";
+import { useEffect, useState } from "react";
+import { useSocket } from "./socket/SocketProvider";
+import { number } from "zod";
 
 type PropsGroupedMenu = {
   label: string;
@@ -125,7 +128,31 @@ type PropsGroupeMenuDirect = {
   users: IUser[];
 };
 
+type CustomUser = IUser & { connected: number };
+
 const GroupeMenuDirect = ({ users }: PropsGroupeMenuDirect) => {
+  const socket = useSocket();
+
+  const [statusUser, setStatusUser] = useState<Record<string, number>>({});
+  const [usersConnected, setUsersConnected] = useState<CustomUser[]>([]);
+
+  useEffect(() => {
+    setUsersConnected(
+      users.map((item) => {
+        return { ...item, connected: 0 };
+      })
+    );
+  }, [users]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("userStatus", (params: { userId: string; status: number }) => {
+        console.log("Changed status", params);
+        setStatusUser((prev) => ({ ...prev, [params.userId]: params.status }));
+      });
+    }
+  }, [socket, usersConnected]);
+
   const router = useRouter();
 
   const handleRouteDirect = (id: number) => {
@@ -141,12 +168,12 @@ const GroupeMenuDirect = ({ users }: PropsGroupeMenuDirect) => {
               <SidebarMenuButton asChild>
                 <a href={"#"}>
                   <User />
-                  <span>Message Direct ({users.length})</span>
+                  <span>Message Direct ({usersConnected.length})</span>
                 </a>
               </SidebarMenuButton>
             </CollapsibleTrigger>
             <CollapsibleContent>
-              {users.map((user) => {
+              {usersConnected.map((user) => {
                 return (
                   <SidebarMenuSub
                     className="cursor-pointer"
@@ -155,7 +182,14 @@ const GroupeMenuDirect = ({ users }: PropsGroupeMenuDirect) => {
                       handleRouteDirect(user.id);
                     }}
                   >
-                    <SidebarMenuSubItem>
+                    <SidebarMenuSubItem
+                      className={`${
+                        typeof statusUser[user.id] !== "undefined" &&
+                        statusUser[user.id.toString()] === 0
+                          ? "bg-red-600"
+                          : "bg-green-600"
+                      }`}
+                    >
                       {user.firstname} {user.lastname}
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>

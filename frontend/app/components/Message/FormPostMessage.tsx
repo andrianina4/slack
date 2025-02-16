@@ -37,6 +37,8 @@ export default function FormPostMessage({
             ),
         content: responseBackend.content,
       });
+
+      if (cb) cb();
     },
   });
   const handleClick = async () => {
@@ -53,8 +55,6 @@ export default function FormPostMessage({
     mutation.mutate(bodySend);
 
     setMessage("");
-
-    if (cb) cb();
   };
 
   return (

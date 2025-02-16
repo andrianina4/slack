@@ -25,6 +25,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
     newSocket.on("disconnect", () => {
       console.log("Frontend déconnecté");
+      newSocket.emit("disconect", { userId: auth?.id });
     });
 
     setSocket(newSocket);

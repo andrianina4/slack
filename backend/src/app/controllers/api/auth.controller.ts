@@ -14,8 +14,12 @@ import {
 } from "@foal/core";
 import { GoogleProvider, GoogleUserInfo } from "@foal/social";
 import { User } from "../../entities";
+import { WsServer } from "@foal/socket.io";
 
 export class AuthController {
+  @dependency
+  wsServer: WsServer;
+
   @dependency
   google: GoogleProvider;
 
@@ -60,8 +64,13 @@ export class AuthController {
   @Post("/logout")
   @UseSessions()
   @UserRequired()
-  async logout(ctx: Context) {
+  async logout(ctx: Context<User>) {
+    const user = ctx.user;
     await ctx.session!.destroy();
+    this.wsServer.io.emit("userStatus", {
+      userId: user.id,
+      status: 0,
+    });
     return new HttpResponseNoContent();
   }
 
