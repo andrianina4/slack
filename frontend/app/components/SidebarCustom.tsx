@@ -84,7 +84,9 @@ const GroupedMenuChannel = ({ label, channels }: PropsGroupedMenu) => {
                 })}
               </CollapsibleContent>
             </SidebarMenuItem>
+          </Collapsible>
 
+          <Collapsible defaultOpen className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton asChild>
