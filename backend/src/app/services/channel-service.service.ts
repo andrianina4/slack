@@ -49,22 +49,6 @@ export class ChannelService {
       },
     });
 
-    // const messages = Messages.find({
-    //   where: {
-    //     recipentGroup: {
-    //       id: channelId,
-    //     },
-    //   },
-    //   relations: {
-    //     sender: true,
-    //     recipentUser: true,
-    //     recipentGroup: true,
-    //   },
-    //   order: {
-    //     id: "DESC",
-    //   },
-    // });
-
     const [resMembers, resChannel] = await Promise.all([
       groupsMembers,
       // messages,
@@ -76,5 +60,25 @@ export class ChannelService {
       // messages: resMessage,
       channel: resChannel,
     };
+  }
+
+  async getMessageChannel(channelId: number) {
+    const messages = await Messages.find({
+      where: {
+        recipentGroup: {
+          id: channelId,
+        },
+      },
+      relations: {
+        sender: true,
+        recipentUser: true,
+        recipentGroup: true,
+      },
+      order: {
+        id: "DESC",
+      },
+    });
+
+    return messages;
   }
 }

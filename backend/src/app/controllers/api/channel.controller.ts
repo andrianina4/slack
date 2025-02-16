@@ -39,4 +39,14 @@ export class ChannelController {
       await this.channelService.getConfigChannel(channelId)
     );
   }
+
+  @Get("/getMessageChannel/:channelId")
+  @UserRequired()
+  @ValidatePathParam("channelId", { type: "number" })
+  async getMessageChannel(ctx: Context<User>) {
+    const channelId = ctx.request.params.channelId;
+    return new HttpResponseOK(
+      await this.channelService.getMessageChannel(channelId)
+    );
+  }
 }
