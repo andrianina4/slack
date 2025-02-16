@@ -1,4 +1,9 @@
-import { IChannel, IMessage, TypeAddChannel } from "@/interfaces/entity";
+import {
+  IChannel,
+  IMessage,
+  TypeAddChannel,
+  TypePostMessageChannel,
+} from "@/interfaces/entity";
 import { IResponseGetConfigChannel } from "@/interfaces/responses";
 
 export async function addChannel(body: TypeAddChannel) {
@@ -30,4 +35,18 @@ export const getMessageChannel = async (channelId: number) => {
     `http://localhost/api/channel/getMessageChannel/${channelId}`
   );
   return (await response.json()) as IMessage[];
+};
+
+export const postMessageChannel = async (body: TypePostMessageChannel) => {
+  const response = await fetch(
+    `http://localhost/api/channel/postMessageChannel`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  );
+  return (await response.json()) as IMessage;
 };

@@ -9,6 +9,7 @@ import {
 } from "@foal/core";
 import { ChannelService } from "../../services";
 import { User } from "../../entities";
+import { TypePostMessageChannel } from "../../types";
 
 export class ChannelController {
   @dependency
@@ -47,6 +48,23 @@ export class ChannelController {
     const channelId = ctx.request.params.channelId;
     return new HttpResponseOK(
       await this.channelService.getMessageChannel(channelId)
+    );
+  }
+
+  @Post("/postMessageChannel")
+  @UserRequired()
+  async postMessageChannel(ctx: Context<User>) {
+    const userConnected = ctx.user;
+    const body = ctx.request.body;
+
+    const data: TypePostMessageChannel = {
+      content: body.content,
+      recipentChannelId: body.recipentChannelId,
+      sender: userConnected,
+    };
+
+    return new HttpResponseOK(
+      await this.channelService.postMessageChannel(data)
     );
   }
 }

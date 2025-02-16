@@ -1,9 +1,8 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import HearderMessage from "./Message/HearderMessage";
-import { Textarea } from "@/components/ui/textarea";
-import ShowMessage from "./Message/ShowMessage";
+
 import ContainerMessage from "./Message/ContainerMessage";
+import FormPostMessage from "./Message/FormPostMessage";
 
 export default function MessageComponent({ channelId }: { channelId: number }) {
   return (
@@ -16,8 +15,7 @@ export default function MessageComponent({ channelId }: { channelId: number }) {
       </div>
 
       <div className="fixed bottom-2 left-78 right-4 max-w-[calc(100vw-16rem)] mx-auto flex gap-2 items-center">
-        <Textarea placeholder="Envoyer un message" />
-        <Button className="cursor-pointer">Envoyer</Button>
+        <FormPostMessage id={channelId} />
       </div>
     </div>
   );

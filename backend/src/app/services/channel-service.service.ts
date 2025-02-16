@@ -1,5 +1,5 @@
 import { Channel, GroupMembers, Messages, User } from "../entities";
-import { TypeAddChannel } from "../types";
+import { TypeAddChannel, TypePostMessageChannel } from "../types";
 
 export class ChannelService {
   async addChannel(body: TypeAddChannel, user: User) {
@@ -80,5 +80,26 @@ export class ChannelService {
     });
 
     return messages;
+  }
+
+  async postMessageChannel(body: TypePostMessageChannel) {
+    const { content, recipentChannelId, sender } = body;
+
+    const channel = await Channel.findOne({
+      where: {
+        id: recipentChannelId,
+      },
+    });
+
+    const newMessage = new Messages();
+    newMessage.content = content;
+    newMessage.sender = sender;
+    if (channel) {
+      newMessage.recipentGroup = channel;
+    }
+
+    await newMessage.save();
+
+    return newMessage;
   }
 }
