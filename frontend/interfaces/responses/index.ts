@@ -10,3 +10,8 @@ export interface IResponseGetConfigChannel {
   // messages: IMessage[];
   channel: IChannel;
 }
+
+export type IResponseLogin = {
+  status: number;
+  type: "email" | "password";
+};
