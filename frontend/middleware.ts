@@ -4,6 +4,8 @@ import type { NextRequest } from "next/server";
 export async function middleware(req: NextRequest) {
   const authCookie = req.cookies.get("sessionID");
 
+  console.log("authCookie", authCookie);
+
   if (!authCookie) {
     return NextResponse.redirect(new URL("/auth", req.url));
   } else {
