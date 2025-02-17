@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
-import { Earth, Lock, User } from "lucide-react";
+import { Circle, Earth, Lock, User } from "lucide-react";
 import DropdownCustom from "./DropdownCustom";
 import { useQuery } from "@tanstack/react-query";
 import { getMyChannel, getMyConversation } from "@/api/channel";
@@ -182,15 +182,23 @@ const GroupeMenuDirect = ({ users }: PropsGroupeMenuDirect) => {
                       handleRouteDirect(user.id);
                     }}
                   >
-                    <SidebarMenuSubItem
-                      className={`${
-                        typeof statusUser[user.id] !== "undefined" &&
-                        statusUser[user.id.toString()] === 0
-                          ? "bg-red-600"
-                          : "bg-green-600"
-                      }`}
-                    >
-                      {user.firstname} {user.lastname}
+                    <SidebarMenuSubItem className="flex gap-1.5 items-center">
+                      {user.firstname} {user.lastname}{" "}
+                      <Circle
+                        className={
+                          typeof statusUser[user.id] !== "undefined" &&
+                          statusUser[user.id.toString()] === 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                        }
+                        size={10}
+                        fill={
+                          typeof statusUser[user.id] !== "undefined" &&
+                          statusUser[user.id.toString()] === 0
+                            ? "red"
+                            : "green"
+                        }
+                      />
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 );
