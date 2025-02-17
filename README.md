@@ -21,7 +21,7 @@ L'application utilise les ports suivants :
 
 1. Clonez le dépôt :
    ```sh
-   git clone https://github.com/andrianina4/slack
+   git clone https://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@github.com/andrianina4/slack.git ou git clone https://github.com/andrianina4/slack
    ```
 2. Accédez au dossier du projet :
    ```sh
