@@ -2,12 +2,33 @@
   "port": "env(PORT)",
   "settings": {
     "loggerFormat": "foal",
+    "disk": {
+      "local": {
+        "directory": "assets"
+      }
+    },
     "session": {
-      "store": "@foal/typeorm"
+      "store": "@foal/typeorm",
+      "expirationTimeouts": {
+        "absolute": 2592000,
+        "inactivity": 2592000
+      }
+    },
+    "social": {
+      "google": {
+        "clientId": "env(GOOGLE_CLIENT_ID)",
+        "clientSecret": "env(GOOGLE_CLIENT_SECRET)",
+        "redirectUri": "env(URL_HOST_REDIRECT)"
+      }
     }
   },
   "database": {
-    "type": "sqlite",
-    "database": "./db.sqlite3"
+    "type": "mysql",
+    "host": "env(DB_HOST)",
+    "port": "env(DB_PORT)",
+    "username": "env(DB_USERNAME)",
+    "password": "env(DB_PASSWORD)",
+    "database": "env(DB_NAME)",
+    "synchronize": false
   }
 }

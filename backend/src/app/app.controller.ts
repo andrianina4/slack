@@ -1,9 +1,6 @@
-import { controller, IAppController } from '@foal/core';
+import { controller, IAppController } from "@foal/core";
+import { ApiController } from "./controllers/api/api.controller";
 
-import { ApiController } from './controllers';
-
-export class AppController implements IAppController {
-  subControllers = [
-    controller('/api', ApiController),
-  ];
+export class AppController {
+  subControllers = [controller("/api", ApiController)];
 }
