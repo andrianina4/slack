@@ -34,6 +34,8 @@ L'application utilise les ports suivants :
 
 ## Accès à l'application
 
+Merci d'attendre : 15 secondes pour le premier démarrage
+
 - Login : [http://localhost/auth](http://localhost/auth)
 - App : [http://localhost](http://localhost)
 - Adminer : [http://localhost/adminer](http://localhost/adminer)
