@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
     appIsrStatus: false,
     buildActivity: false,
   },
+
+  images: {
+    domains: ["img.icons8.com"],
+  },
 };
 
 export default nextConfig;

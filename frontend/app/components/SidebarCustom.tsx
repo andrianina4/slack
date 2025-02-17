@@ -38,7 +38,6 @@ import AvatarCustom from "./AvatarCustom";
 import { Separator } from "@radix-ui/react-separator";
 import { useEffect, useState } from "react";
 import { useSocket } from "./socket/SocketProvider";
-import { number } from "zod";
 
 type PropsGroupedMenu = {
   label: string;
