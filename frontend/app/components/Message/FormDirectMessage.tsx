@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import * as React from "react";
@@ -65,7 +64,7 @@ export function FormDirectMessage({ cb }: PropsFormDirectMessage) {
                 {data.map((user) => (
                   <CommandItem
                     key={user.id}
-                    value={user.id}
+                    value={user.id.toString()}
                     onSelect={() => {
                       setValue(user.id);
                       setOpen(false);

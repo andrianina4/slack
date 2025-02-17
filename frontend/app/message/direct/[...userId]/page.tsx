@@ -1,14 +1,12 @@
 import MessageComponent from "@/app/components/MessageComponent";
 import React from "react";
 
-export default function page(props: {
-  params: {
-    userId: string;
-  };
+export default async function page({
+  params,
+}: {
+  params: Promise<{ userId: string }>;
 }) {
-  const {
-    params: { userId },
-  } = props;
+  const userId = (await params).userId;
 
   return (
     <div>
