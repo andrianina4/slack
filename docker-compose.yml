@@ -23,6 +23,7 @@ services:
       - VITE_PORT=${NEXT_PORT}
       - VITE_FOAL_URL=${URL_HOST}
       - VITE_FOAL_PORT=${PORT_BACKEND}
+      - NEXT_PUBLIC_NO_ERROR_DISPLAY=true
     volumes:
       - ./frontend:/app
       - ./frontend/node_modules:/app/node_modules
@@ -51,7 +52,7 @@ services:
       - ./backend:/backend
       - ./backend/node_modules:/backend/node_modules
     command: >
-      sh -c "npm run migrations && npm run dev"
+      sh -c "yarn && npm run build && npm run migrations && npm run dev"
 
   nginx:
     depends_on:

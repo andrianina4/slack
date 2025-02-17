@@ -6,8 +6,8 @@ RUN yarn
 
 COPY . .
 
-RUN npm run build
+# RUN npm run build
 
 
 EXPOSE 5000
-CMD ["npm","run","dev"]
+# CMD ["npm","run","dev"]
